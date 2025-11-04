@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <map>
 #include <queue>
 using namespace std;
 
@@ -41,7 +42,6 @@ void preOrderTraversal(Node* root){
     preOrderTraversal(root->left);
     preOrderTraversal(root->right);
 }
-
 
 void inOrderTraversal(Node* root){
 
@@ -117,6 +117,95 @@ bool treeIdentical(Node* root1, Node* root2){
 
 bool isASubtree(Node* mainTree, Node* subTree){
     
+
+}
+
+int diameterOfTree(Node* root){
+    if(root == nullptr) return 0;
+
+    int leftDiameter = diameterOfTree(root->left);
+    int rightDiameter = diameterOfTree(root->right);
+
+    int currDiameter = heightOfTree(root->left) + heightOfTree(root->right);
+
+    return max(currDiameter, max(leftDiameter, rightDiameter));
+
+}
+
+static int ans;
+
+int diameterFromHeight(Node* root){
+
+    if(root == nullptr) return 0;
+
+    int leftht = diameterFromHeight(root->left);
+    int rightht = diameterFromHeight(root->right);
+
+    ans = max(leftht+rightht, ans);
+
+    return max(leftht, rightht) + 1;
+
+}
+
+
+void topView(Node* root){
+    map<int,int> mp;
+    queue<pair<Node*,int>> q;
+    q.push({root, 0});
+
+    while(!q.empty()){
+
+        pair<Node*,int> curr = q.front();
+
+        Node* node = curr.first;
+        int hd = curr.second;
+        q.pop();
+
+
+        if(mp.find(hd) == mp.end()){
+            mp[hd] = node->value;
+        }
+
+        if(node->left) q.push({node->left,hd-1});
+        if(node->right) q.push({node->right,hd+1});
+    }
+
+    for(auto it : mp)
+        cout << it.second << " ";
+}
+
+
+void kthLevelOfTree(Node* root, int lvl, int k){
+
+    if(root == nullptr) return;
+
+    if(lvl == k){
+        cout << root->value << " , ";
+        return;
+    }
+    
+    // Recurse only if current level < k
+    kthLevelOfTree(root->left, lvl + 1, k);
+    kthLevelOfTree(root->right, lvl + 1, k);
+
+}
+
+
+void lvlordrtrvrsal(Node* root){
+    if(!root) return;
+
+    queue<Node*> q;
+    q.push(root);
+
+    while(!q.empty()){
+
+        Node* curr = q.front();
+        q.pop();
+        cout << curr->value << " , ";
+
+        if(curr->left) q.push(curr->left);
+        if(curr->right) q.push(curr->right);
+    }
 
 }
 
