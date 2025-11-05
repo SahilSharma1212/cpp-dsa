@@ -210,6 +210,25 @@ void lvlordrtrvrsal(Node* root){
 }
 
 
+Node* LCA(Node* root, int p, int q){
+    if(root == nullptr) return nullptr;
+
+    if(root->value == p || root->value == q){
+        return root;
+    }
+
+    Node* leftans = LCA(root->left, p, q);
+    Node* rightans = LCA(root->right, p, q);
+    
+    
+    // boths return non-null, current node is LCA
+    if (leftans != nullptr && rightans != nullptr)
+        return root;
+
+    // one side null, return the other
+    return (leftans != nullptr) ? leftans : rightans;
+}
+
 int main() {
     cout << "Hello World" << endl;
 
